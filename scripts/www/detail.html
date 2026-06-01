@@ -322,7 +322,7 @@
     </div>
 
     <script>
-        // 生成固定时间水印，高密度版本
+        // 生成固定时间水印，调整字体大小和密度
         function createWatermark() {
             const watermark = document.getElementById('watermark');
             const user = '赖海安';
@@ -337,10 +337,10 @@
             }).replace(/\//g, '-');
             const text = `${user} ${timeStr}`;
 
-            // 大幅缩小画布尺寸，提升水印密度
+            // 调整字体大小为16px，并大幅缩小水印单元尺寸以增加密度
             const svg = `
-                <svg xmlns="http://www.w3.org/2000/svg" width="120" height="70">
-                    <text x="0" y="35" font-size="14" fill="#cccccc" fill-opacity="0.5" transform="rotate(-20 60 35)">
+                <svg xmlns="http://www.w3.org/2000/svg" width="150" height="70">
+                    <text x="0" y="35" font-size="16" fill="#cccccc" fill-opacity="0.5" transform="rotate(-20 75 35)">
                         ${text}
                     </text>
                 </svg>
@@ -354,3 +354,4 @@
     </script>
 </body>
 </html>
+`
