@@ -70,7 +70,7 @@
             top: 0;
             left: 0;
             width: 100%;
-            height: 85%;
+            height: 92%;
             pointer-events: none;
             overflow: hidden;
             z-index: 10;
@@ -212,7 +212,7 @@
     </div>
 
     <div class="content">
-        <!-- 水印容器，调整覆盖范围到下方灰线 -->
+        <!-- 水印容器 -->
         <div class="watermark-wrapper">
             <div class="watermark-container" id="watermark"></div>
         </div>
@@ -322,11 +322,10 @@
     </div>
 
     <script>
-        // 生成固定时间的水印（修复中文乱码）
+        // 生成固定时间水印，高密度版本
         function createWatermark() {
             const watermark = document.getElementById('watermark');
             const user = '赖海安';
-            // 获取页面打开时的固定时间
             const now = new Date();
             const timeStr = now.toLocaleString('zh-CN', {
                 year: 'numeric',
@@ -338,23 +337,20 @@
             }).replace(/\//g, '-');
             const text = `${user} ${timeStr}`;
 
-            // 生成更密集的水印背景
+            // 大幅缩小画布尺寸，提升水印密度
             const svg = `
-                <svg xmlns="http://www.w3.org/2000/svg" width="180" height="100">
-                    <text x="0" y="50" font-size="16" fill="#cccccc" fill-opacity="0.5" transform="rotate(-20 90 50)">
+                <svg xmlns="http://www.w3.org/2000/svg" width="120" height="70">
+                    <text x="0" y="35" font-size="14" fill="#cccccc" fill-opacity="0.5" transform="rotate(-20 60 35)">
                         ${text}
                     </text>
                 </svg>
             `;
-            // 正确处理中文的编码方式
             const encodedSvg = unescape(encodeURIComponent(svg));
             const dataUrl = `data:image/svg+xml;base64,${btoa(encodedSvg)}`;
             watermark.style.backgroundImage = `url(${dataUrl})`;
         }
-
-        // 初始化水印（只执行一次，时间固定）
+        // 仅执行一次，时间固定不变
         createWatermark();
     </script>
 </body>
 </html>
-`
