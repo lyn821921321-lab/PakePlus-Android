@@ -63,10 +63,31 @@
             flex: 1;
             overflow-y: auto;
             padding: 8px 0;
+            position: relative;
+        }
+        .watermark-wrapper {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 85%;
+            pointer-events: none;
+            overflow: hidden;
+            z-index: 10;
+        }
+        .watermark-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-repeat: repeat;
         }
         .module {
             background-color: #fff;
             margin-bottom: 10px;
+            position: relative;
+            z-index: 1;
         }
         .section-title {
             padding: 12px 16px;
@@ -191,16 +212,21 @@
     </div>
 
     <div class="content">
+        <!-- 水印容器，调整覆盖范围到下方灰线 -->
+        <div class="watermark-wrapper">
+            <div class="watermark-container" id="watermark"></div>
+        </div>
+
         <div class="module">
             <div class="section-title">学生基本信息</div>
             <div class="student-info">
                 <div class="row">
                     <div class="label">姓名</div>
-                    <div class="value">李涛</div>
+                    <div class="value">赖海安</div>
                 </div>
                 <div class="row">
                     <div class="label">学号</div>
-                    <div class="value">3203241214</div>
+                    <div class="value">3203241213</div>
                 </div>
                 <div class="row">
                     <div class="label">性别</div>
@@ -236,10 +262,10 @@
                 <div>请假去向：<span class="value">离校不离市</span></div>
                 <div>详细地址：<span class="value">江西省赣州市南康市联辰驾校</span></div>
                 <!-- 仅修改这两行时间，其余完全不动 -->
-                <div>请假开始时间：<span class="value">2026-05-27 12:00</span></div>
-                <div>请假结束时间：<span class="value">2026-05-27 20:00</span></div>
+                <div>请假开始时间：<span class="value">2026-06-01 12:00</span></div>
+                <div>请假结束时间：<span class="value">2026-06-01 20:00</span></div>
                 <div>请假时长：<span class="value">8小时</span></div>
-                <div>紧急联系人：<span class="value">李才生</span></div>
+                <div>紧急联系人：<span class="value">赖华金</span></div>
                 <div>紧急联系人电话：<span class="value">17879892996</span></div>
                 <div>请假理由：<span class="value">练车</span></div>
                 <div>附件：<span class="value"></span></div>
@@ -261,9 +287,9 @@
                         <div class="progress-content">
                             <div class="progress-title">
                                 申请 <span class="status">申请</span>
-                                <span class="progress-time">2026-05-27 9:09</span>
+                                <span class="progress-time">2026-06-01 9:09</span>
                             </div>
-                            <div class="progress-name">李涛</div>
+                            <div class="progress-name">赖海安</div>
                         </div>
                     </div>
                     <div class="progress-step">
@@ -274,7 +300,7 @@
                         <div class="progress-content">
                             <div class="progress-title">
                                 班主任审核 <span class="status">审核通过</span>
-                                <span class="progress-time">2026-05-27 10:13</span>
+                                <span class="progress-time">2026-06-01 10:13</span>
                             </div>
                             <div class="progress-name">
                                 邓华军
@@ -294,5 +320,41 @@
             </div>
         </div>
     </div>
+
+    <script>
+        // 生成固定时间的水印（修复中文乱码）
+        function createWatermark() {
+            const watermark = document.getElementById('watermark');
+            const user = '赖海安';
+            // 获取页面打开时的固定时间
+            const now = new Date();
+            const timeStr = now.toLocaleString('zh-CN', {
+                year: 'numeric',
+                month: '2-digit',
+                day: '2-digit',
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit'
+            }).replace(/\//g, '-');
+            const text = `${user} ${timeStr}`;
+
+            // 生成更密集的水印背景
+            const svg = `
+                <svg xmlns="http://www.w3.org/2000/svg" width="180" height="100">
+                    <text x="0" y="50" font-size="16" fill="#cccccc" fill-opacity="0.5" transform="rotate(-20 90 50)">
+                        ${text}
+                    </text>
+                </svg>
+            `;
+            // 正确处理中文的编码方式
+            const encodedSvg = unescape(encodeURIComponent(svg));
+            const dataUrl = `data:image/svg+xml;base64,${btoa(encodedSvg)}`;
+            watermark.style.backgroundImage = `url(${dataUrl})`;
+        }
+
+        // 初始化水印（只执行一次，时间固定）
+        createWatermark();
+    </script>
 </body>
 </html>
+`
